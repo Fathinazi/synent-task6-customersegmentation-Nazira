@@ -1,0 +1,42 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+df=read.csv(file.choose())
+df
+```
+```{r}
+head(df)
+```
+```{r}
+colnames(df)
+```
+```{r}
+library(janitor)
+df <- clean_names(df)
+
+colnames(df)
+```
+```{r}
+data <- df[, c("annual_income_k", "spending_score_1_100")]
+
+scaled_data <- scale(data)
+
+set.seed(123)
+kmeans_model <- kmeans(scaled_data, centers = 5)
+kmeans_model
+df$cluster <- kmeans_model$cluster
+df$cluster
+library(ggplot2)
+
+ggplot(df, aes(x = annual_income_k, y = spending_score_1_100, color = as.factor(cluster))) +
+  geom_point(size = 3) +
+  ggtitle("Customer Segmentation")
+```
+
